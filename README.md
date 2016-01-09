@@ -1,0 +1,2 @@
+# AegisPHP
+Aegis PHP library.
