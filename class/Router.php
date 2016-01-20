@@ -11,24 +11,11 @@
 		public $domain;
 		private $routes;
 
-		function __construct($domain){
-			if(explode('.',$_SERVER['HTTP_HOST'])[0] == 'www'){
-				$this -> domain = "http://www.$domain";
-			}else{
-				$this -> domain = "http://$domain";
-			}
+		function __construct($domain = ""){
+			$this -> domain = $domain == "" ? $_SERVER['HTTP_HOST'] : $domain;
 			$this -> routes = array();
 	    }
 
-		/**
-		* Get URL Route.
-		*
-		* Decomposes the current URL into an array
-		* to act as a router
-		*
-		* @access public
-		* @return void
-		*/
 		public function getRoute(){
 			$basepath = implode('/', array_slice(explode('/', $_SERVER['SCRIPT_NAME']), 0, -1)) . '/';
 	    	$url = substr($_SERVER['REQUEST_URI'], strlen($basepath));
@@ -41,7 +28,7 @@
 		}
 
 		public function getBaseUrl(){
-			return $this -> domain;
+			return $this -> getProtocol() . $this -> domain . '/';
 		}
 
 		public function getFullUrl(){
@@ -64,9 +51,21 @@
 			return $this -> routes[$this -> getRoute()];
 		}
 
-		function __destruct() {
+		public function getProtocol(){
+			return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+		}
 
-	    }
-
+		public function listen(){
+			if($this -> match()){
+				$view = $this -> getView();
+				if($view -> isCompilable()){
+					echo  $view -> compile();
+				}else{
+					include $view -> getView();
+				}
+			}else{
+				include_once("error/404.html");
+			}
+		}
 	}
 ?>

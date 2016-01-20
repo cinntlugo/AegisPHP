@@ -12,7 +12,9 @@
 	    require_once("class/$className.php");
 	}
 
-	require_once("Library.php");
+	if(file_exists("library.php")){
+		require_once("library.php");
+	}
 
 	/**
 	 * Error Handler.

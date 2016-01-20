@@ -23,6 +23,14 @@
 
 					$array[$value] = $allowHTML ? $method[$value] : strip_tags($method[$value]);
 
+				}elseif(isset($_FILES[$value])){
+					
+					if(!$allowEmpty && empty($_FILES[$value])){
+						return false;
+					}
+
+					$array[$value] = $_FILES[$value];
+
 				}else{
 					return false;
 				}
