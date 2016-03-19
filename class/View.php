@@ -21,7 +21,7 @@
 	    }
 
 	    public function getView(){
-		    return $this -> viewContent;
+		    return $this -> view;
 	    }
 
 	    public function isCompilable(){
