@@ -12,8 +12,8 @@
 	    require_once("class/$className.php");
 	}
 
-	if(file_exists("library.php")){
-		require_once("library.php");
+	if(file_exists("lib/library.php")){
+		require_once("lib/library.php");
 	}
 
 	/**
