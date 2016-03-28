@@ -43,7 +43,8 @@
 					$this -> viewContent = str_replace("{{".$key."}}", $value, $this -> viewContent);
 				}
 			}
-			$this -> viewContent = str_replace("{>{content}<}", file_get_contents("templates/" . $this -> template . ".html"), $this -> viewContent);
+
+			$this -> viewContent = str_replace("{>{content}<}", "{{> " . $this -> template . "}}", $this -> viewContent);
 		}
 
 
