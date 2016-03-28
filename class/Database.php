@@ -36,35 +36,35 @@
 
 		public function query($query, $array = []){
 		    if($sth = $this -> pdo -> prepare($query)){
-				return $sth -> execute($array) ? $sth -> fetchAll(PDO::FETCH_ASSOC) : false;
+				return $sth -> execute($array) ? $sth -> fetchAll(PDO::FETCH_ASSOC) : null;
 		    }else{
-		        return false;
+		        return null;
 		    }
 		 }
 
 
-		public function selectAllWhere($key, $table, $keyname){
+		public function selectAllWhere($table, $keyname, $key){
 			if($sth = $this -> pdo -> prepare("SELECT * FROM `$table` WHERE `$keyname` = ?")){
-				$sth -> execute(array($key));
-				return $sth -> fetchAll(PDO::FETCH_ASSOC);
+				return $sth -> execute(array($key)) ? $sth -> fetchAll(PDO::FETCH_ASSOC) : null;
 			}
+			return null;
 		}
 
 		public function selectAllFrom($table){
 		    if($sth = $this -> pdo -> prepare("SELECT * FROM `$table`")){
-		        $sth -> execute();
-				return $sth -> fetchAll(PDO::FETCH_ASSOC);
+		        return $sth -> execute() ? $sth -> fetchAll(PDO::FETCH_ASSOC) : null;
 		    }
+		    return null;
 		}
 
-		public function exists($keyname, $table, $key){
+		public function exists($table, $keyname, $key){
 		    if($sth = $this -> pdo -> prepare("SELECT `$keyname` FROM `$table` WHERE `$keyname`= ?")){
-		         $sth -> execute(array($key));
-		         return $sth -> rowCount() > 0;
+				return $sth -> execute(array($key)) ? $sth -> rowCount() > 0 : false;
 		    }
+		    return false;
 		}
 
-		public function insert($values, $table){
+		public function insert($table, $values){
 			$fields = "";
 			$questionMarks = "";
 			$array = array();
@@ -86,17 +86,14 @@
 		public function update($table, $values, $whereField, $whereValue){
 
 			$string = "";
-			$lastElement = end($values);
-			$array = array(0);
+			$array = array();
 
 			foreach($values as $key => $value){
-				if($value == $lastElement){
-					$string .= "`$key` = ?";
-				}else{
-					$string .= "`$key` = ?,";
-				}
+				$string .= "`$key` = ?,";
 				array_push($array, $value);
 			}
+
+			$string = rtrim($string, ",");
 
 			array_push($array , $whereValue);
 
@@ -197,11 +194,11 @@
 		    return $this -> query($data);
 		}
 
-		public function selectAllByDate($table,$date){
-		    if($sth = $this -> pdo -> prepare("SELECT * FROM `$table` ORDER BY DATE(`$date`) ASC")){
-		        $sth -> execute();
-				return $sth -> fetchAll(PDO::FETCH_ASSOC);
+		public function selectAllByDate($table, $dateField){
+		    if($sth = $this -> pdo -> prepare("SELECT * FROM `$table` ORDER BY DATE(`$dateField`) DESC")){
+		        return $sth -> execute() ? $sth -> fetchAll(PDO::FETCH_ASSOC) : null;
 		    }
+		    return null;
 		}
 
 		function __destruct() {
