@@ -10,11 +10,13 @@
 
 
 		private $view;
+		private $template;
 		private $data;
 		private $meta;
 		private $viewContent;
 
-		function __construct($data = null, $meta = null, $view = "default.php"){
+		function __construct($template, $data = null, $meta = null, $view = "default.php"){
+			$this -> template = $template;
 			$this -> view = $view;
 			$this -> data = $data;
 			$this -> meta = $meta;
@@ -41,6 +43,7 @@
 					$this -> viewContent = str_replace("{{".$key."}}", $value, $this -> viewContent);
 				}
 			}
+			$this -> viewContent = str_replace("{>{content}<}", file_get_contents("templates/" . $this -> template . ".html"), $this -> viewContent);
 		}
 
 
