@@ -32,7 +32,7 @@
 		}
 
 		/**
-		 * Check Passowrd Strenght.
+		 * Check Password Strenght.
 		 *
 		 * @access public
 		 * @param mixed $password
