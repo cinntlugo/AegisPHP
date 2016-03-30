@@ -58,10 +58,10 @@
 		public function listen(){
 			if($this -> match()){
 				$view = $this -> getView();
-				if($view -> isCompilable()){
+				if(is_string($view)){
+					include $view;
+				}else if($view -> isCompilable()){
 					echo  $view -> compile();
-				}else{
-					include $view -> getView();
 				}
 			}else{
 				include_once("error/404.html");
